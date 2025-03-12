@@ -16,6 +16,7 @@ import org.joml.Vector4f;
 import comp3170.GLBuffers;
 import comp3170.Shader;
 import comp3170.ShaderLibrary;
+import static comp3170.Math.TAU;
 
 public class Scene {
 
@@ -28,6 +29,8 @@ public class Scene {
 	private int indexBuffer;
 	private Vector3f[] colours;
 	private int colourBuffer;
+	
+	private Matrix4f modelMatrix;
 
 	private Shader shader;
 
@@ -77,6 +80,17 @@ public class Scene {
 			// @formatter:on
 
 		indexBuffer = GLBuffers.createIndexBuffer(indices);
+		
+		modelMatrix = new Matrix4f();
+		Matrix4f translateMatrix = new Matrix4f();
+		Matrix4f rotateMatrix = new Matrix4f();
+		Matrix4f scaleMatrix = new Matrix4f();
+		
+		translationMatrix(0.5f, 0.5f, translateMatrix);
+		rotationMatrix(0.0f, rotateMatrix);
+		scaleMatrix(0.5f, 0.5f, scaleMatrix);
+		
+		modelMatrix.mul(translateMatrix).mul(rotateMatrix).mul(scaleMatrix);
 
 	}
 
@@ -86,6 +100,9 @@ public class Scene {
 		// set the attributes
 		shader.setAttribute("a_position", vertexBuffer);
 		shader.setAttribute("a_colour", colourBuffer);
+		
+		// set the uniforms
+		shader.setUniform("u_modelMatrix", modelMatrix);
 
 		// draw using index buffer
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
@@ -133,16 +150,20 @@ public class Scene {
 	 */
 
 	public static Matrix4f rotationMatrix(float angle, Matrix4f dest) {
+		
+		dest.identity();
 
 		//     [cos(a) -sin(a) 0 0]
 		// R = [sin(a)  cos(a) 0 0]
 		//     [0       0      0 0]
 		//     [0       0      0 1]
 		
-		dest.m00((float) Math.cos(angle));
-		dest.m01((float) -Math.sin(angle));
-		dest.m10((float) Math.sin(angle));
-		dest.m11((float) Math.cos(angle));
+		float c = (float) Math.cos(angle);
+		float s = (float) Math.sin(angle);
+		dest.m00(c);
+		dest.m01(-s);
+		dest.m10(s);
+		dest.m11(c);
 
 		return dest;
 	}
@@ -158,6 +179,8 @@ public class Scene {
 	 */
 
 	public static Matrix4f scaleMatrix(float sx, float sy, Matrix4f dest) {
+		
+		dest.identity();
 
 		//     [sx 0 0 0]
 		// S = [0 sy 0 0]
