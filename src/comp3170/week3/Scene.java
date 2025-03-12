@@ -31,6 +31,9 @@ public class Scene {
 	private int colourBuffer;
 	
 	private Matrix4f modelMatrix;
+	
+	private static final float translationSpeed = 1.0f;
+	private static final float rotationSpeed = TAU / 4;
 
 	private Shader shader;
 
@@ -86,9 +89,9 @@ public class Scene {
 		Matrix4f rotateMatrix = new Matrix4f();
 		Matrix4f scaleMatrix = new Matrix4f();
 		
-		translationMatrix(0.5f, 0.5f, translateMatrix);
+		translationMatrix(-0.4f, 0.0f, translateMatrix);
 		rotationMatrix(0.0f, rotateMatrix);
-		scaleMatrix(0.5f, 0.5f, scaleMatrix);
+		scaleMatrix(0.25f, 0.25f, scaleMatrix);
 		
 		modelMatrix.mul(translateMatrix).mul(rotateMatrix).mul(scaleMatrix);
 
@@ -110,6 +113,14 @@ public class Scene {
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
 
+	}
+	
+	public void update(float deltaTime) {
+		Matrix4f translateMatrix = new Matrix4f();
+		Matrix4f rotateMatrix = new Matrix4f();
+		translationMatrix(0.0f, 3.0f * deltaTime, translateMatrix);
+		rotationMatrix(rotationSpeed * deltaTime, rotateMatrix);
+		modelMatrix.mul(rotateMatrix).mul(translateMatrix);
 	}
 
 	/**
