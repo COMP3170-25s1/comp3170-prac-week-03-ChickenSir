@@ -32,6 +32,10 @@ public class Scene {
 	
 	private Matrix4f modelMatrix;
 	
+	private Matrix4f translateMatrix;
+	private Matrix4f rotateMatrix;
+	private Matrix4f scaleMatrix;
+	
 	private static final float translationSpeed = 1.0f;
 	private static final float rotationSpeed = TAU / 4;
 
@@ -85,9 +89,9 @@ public class Scene {
 		indexBuffer = GLBuffers.createIndexBuffer(indices);
 		
 		modelMatrix = new Matrix4f();
-		Matrix4f translateMatrix = new Matrix4f();
-		Matrix4f rotateMatrix = new Matrix4f();
-		Matrix4f scaleMatrix = new Matrix4f();
+		translateMatrix = new Matrix4f();
+		rotateMatrix = new Matrix4f();
+		scaleMatrix = new Matrix4f();
 		
 		translationMatrix(-0.4f, 0.0f, translateMatrix);
 		rotationMatrix(0.0f, rotateMatrix);
@@ -116,8 +120,6 @@ public class Scene {
 	}
 	
 	public void update(float deltaTime) {
-		Matrix4f translateMatrix = new Matrix4f();
-		Matrix4f rotateMatrix = new Matrix4f();
 		translationMatrix(0.0f, 3.0f * deltaTime, translateMatrix);
 		rotationMatrix(rotationSpeed * deltaTime, rotateMatrix);
 		modelMatrix.mul(rotateMatrix).mul(translateMatrix);
