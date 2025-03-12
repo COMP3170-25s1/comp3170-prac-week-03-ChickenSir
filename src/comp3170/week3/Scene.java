@@ -36,7 +36,7 @@ public class Scene {
 	private Matrix4f rotateMatrix;
 	private Matrix4f scaleMatrix;
 	
-	private static final float translationSpeed = 1.0f;
+	private static final float translationSpeed = 3.0f;
 	private static final float rotationSpeed = TAU / 4;
 
 	private Shader shader;
@@ -120,7 +120,7 @@ public class Scene {
 	}
 	
 	public void update(float deltaTime) {
-		translationMatrix(0.0f, 3.0f * deltaTime, translateMatrix);
+		translationMatrix(0.0f, translationSpeed * deltaTime, translateMatrix);
 		rotationMatrix(rotationSpeed * deltaTime, rotateMatrix);
 		modelMatrix.mul(rotateMatrix).mul(translateMatrix);
 	}
