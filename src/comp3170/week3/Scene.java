@@ -134,7 +134,15 @@ public class Scene {
 
 	public static Matrix4f rotationMatrix(float angle, Matrix4f dest) {
 
-		// TODO: Your code here
+		//     [cos(a) -sin(a) 0 0]
+		// R = [sin(a)  cos(a) 0 0]
+		//     [0       0      0 0]
+		//     [0       0      0 1]
+		
+		dest.m00((float) Math.cos(angle));
+		dest.m01((float) -Math.sin(angle));
+		dest.m10((float) Math.sin(angle));
+		dest.m11((float) Math.cos(angle));
 
 		return dest;
 	}
@@ -151,7 +159,13 @@ public class Scene {
 
 	public static Matrix4f scaleMatrix(float sx, float sy, Matrix4f dest) {
 
-		// TODO: Your code here
+		//     [sx 0 0 0]
+		// S = [0 sy 0 0]
+		//     [0  0 0 0]
+		//     [0  0 0 1]
+		
+		dest.m00(sx);
+		dest.m11(sy);
 
 		return dest;
 	}
